@@ -4,3 +4,4 @@
 
  - queue    队列,FIFO缓冲区
  - deque    双端队列,方便访问其两端点的序列
+ - stack    栈,FILO缓冲区

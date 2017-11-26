@@ -36,14 +36,14 @@
         stack)))
 
 (define (push-stack! stack item)
-  (let ([new-pair (cons item '())])
-    (cond [(empty-stack? stack)
+  (let ((new-pair (cons item '())))
+    (cond ((empty-stack? stack)
            (set-top-ptr! stack new-pair)
-           stack]
-          [else
+           stack)
+          (else
             (set-cdr! new-pair (cdr stack))
             (set-top-ptr! stack new-pair)
-            stack])))
+            stack))))
 
 (define (print-stack stack)
   (cdr stack))

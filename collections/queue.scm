@@ -38,24 +38,24 @@
 
 ; queue setter
 (define (insert-queue! queue item)
-  (let ([new-pair (cons item '())])
+  (let ((new-pair (cons item '())))
     (cond
-      [(empty-queue? queue)
+      ((empty-queue? queue)
        (set-front-ptr! queue new-pair)
        (set-rear-ptr! queue new-pair)
-       queue]
-      [else
+       queue)
+      (else
        (set-cdr! (rear-ptr queue) new-pair)
        (set-rear-ptr! queue new-pair)
-       queue])))
+       queue))))
 
 (define (delete-queue! queue)
   (cond
-	[(empty-queue? queue)
-	 (error "DELETE! called with an empty queue" queue)]
-	[else
+	((empty-queue? queue)
+	 (error "DELETE! called with an empty queue" queue))
+	(else
 	 (set-front-ptr! queue (cdr (front-ptr queue)))
-	 queue]))
+	 queue)))
 
 
 (define (print-queue queue)

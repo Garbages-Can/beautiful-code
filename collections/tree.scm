@@ -31,11 +31,11 @@
 (define (element-of-tree? elem tree)
   (if (empty-tree? tree)
       #f
-      (cond [(= elem (entry tree)) #t]
-            [(> elem (entry tree))
-             (element-of-tree? elem (right-branch tree))]
-            [(< elem (entry tree))
-             (element-of-tree? elem (left-branch tree))])))
+      (cond ((= elem (entry tree)) #t)
+            ((> elem (entry tree))
+             (element-of-tree? elem (right-branch tree)))
+            ((< elem (entry tree))
+             (element-of-tree? elem (left-branch tree))))))
 
 
 ; auxiliary
@@ -52,23 +52,23 @@
 
 ; tree setter
 (define (insert-tree! elem tree)
-  (let ([new-node (make-tree elem '() '())])
-    (cond [(empty-tree? tree) new-node]
-          [(< elem (entry tree))
-           (set-left-branch! tree (insert-tree! elem (left-branch tree)))]
-          [(> elem (entry tree))
+  (let ((new-node (make-tree elem '() '())))
+    (cond ((empty-tree? tree) new-node)
+          ((< elem (entry tree))
+           (set-left-branch! tree (insert-tree! elem (left-branch tree))))
+          ((> elem (entry tree))
            (set-right-branch! tree (insert-tree! elem (right-branch tree)))
-           tree])))
+           tree))))
 
 (define (remove-tree! elem tree)
   (if (empty-tree? tree)
       (error
         "REMOVE called with an empty tree" tree)
-      (cond [(= elem (entry tree))
-             (let ([tmp (min-tree tree)])
+      (cond ((= elem (entry tree))
+             (let ((tmp (min-tree tree)))
                (set! (entry tree) tmp)
-               (remove-tree! tmp (right-branch tree)))]
-            [(> elem (entry tree))
-             (remove-tree! elem (right-branch tree))]
-            [(< elem (entry tree))
-             (remove-tree! elem (left-branch tree))])))
+               (remove-tree! tmp (right-branch tree))))
+            ((> elem (entry tree))
+             (remove-tree! elem (right-branch tree)))
+            ((< elem (entry tree))
+             (remove-tree! elem (left-branch tree))))))

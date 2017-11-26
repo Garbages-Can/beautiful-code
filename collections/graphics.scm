@@ -20,7 +20,7 @@
 
 ; initial
 (define (init-graphics graph)
-  (let ([row 0] [col 0])
+  (let ((row 0) (col 0))
     (if (and (< row (length graph))
              (< col (length graph)))
       (set-graphics! graph row col 0))))

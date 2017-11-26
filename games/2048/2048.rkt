@@ -1,7 +1,7 @@
 #lang racket
 
 (require "2222.rkt"
-         (rename-in 2htdp/image [rotate rotate-1])
+         (rename-in 2htdp/image (rotate rotate-1))
          2htdp/universe)
 
 (define PIECE_DIST '(2 2 2 2 2 2 2 2 2 4))
@@ -23,19 +23,19 @@
 
 ; e.g. '((2 2) (2 0) (0 0)) -> '(1 2)
 (define (get-empty-refs lst zero-fun?)
-  (for/list ([item lst]
-             [i (range (length lst))]
+  (for/list ((item lst)
+             (i (range (length lst)))
              #:when (zero-fun? item))
     i))
 
 ; e.g. '(0 2 0 0) -> '(0 2 0 2)
-; e.g. '((0 2 0 0) (2 4 8 16) (0 4 4 8) (2 0 0 0)) -> 
+; e.g. '((0 2 0 0) (2 4 8 16) (0 4 4 8) (2 0 0 0)) ->
 ;      '((0 2 0 0) (2 4 8 16) (0 4 4 8) (2 0 2 0))
 (define (put-random-piece lst)
   (if (avail? lst)
       (if (list? lst)
-          (let* ([i (choice (get-empty-refs lst avail?))]
-                 [v (list-ref lst i)])
+          (let* ((i (choice (get-empty-refs lst avail?)))
+                 (v (list-ref lst i)))
             (append (take lst i)
                     (cons (put-random-piece v) (drop lst (add1 i)))))
           (get-a-piece))
@@ -43,17 +43,17 @@
 
 ; e.g. '(2 2 2 4 4 4 8) -> '(4 2 8 4 8)
 (define (merge row)
-  (cond [(<= (length row) 1) row]
-        [(= (first row) (second row))
-         (cons (* 2 (first row)) (merge (drop row 2)))]
-        [else (cons (first row) (merge (rest row)))]))
+  (cond ((<= (length row) 1) row)
+        ((= (first row) (second row))
+         (cons (* 2 (first row)) (merge (drop row 2))))
+        (else (cons (first row) (merge (rest row))))))
 
 ; e.g. '(2 0 4 4) #f -> (0 0 2 8)
 (define (move-row row v left?)
    (if left?
-       (let* ([n (length row)]
-              [l (merge (filter (λ (x) (not (zero? x))) row))]
-              [padding (make-list (- n (length l)) v)])
+       (let* ((n (length row))
+              (l (merge (filter (λ (x) (not (zero? x))) row)))
+              (padding (make-list (- n (length l)) v)))
          (append l padding))
        (reverse (move-row (reverse row) v (not left?)))))
 
@@ -108,31 +108,31 @@
     (if (zero? n) ""
         (number->string n)))
 
-  (overlay (let* ([t (text (text-content n) TILE-TEXT-SIZE TILE-FG)]
-                  [v (max (image-width t) (image-height t))]
-                  [s (if (> v MAX-TEXT-SIZE) (/ MAX-TEXT-SIZE v) 1)])
+  (overlay (let* ((t (text (text-content n) TILE-TEXT-SIZE TILE-FG))
+                  (v (max (image-width t) (image-height t)))
+                  (s (if (> v MAX-TEXT-SIZE) (/ MAX-TEXT-SIZE v) 1)))
              (scale s t))
            (square TILE-SIZE 'solid (hash-ref TILE-BG n))
            (square (+ TILE-SIZE (* 2 TILE-SPACING)) 'solid GRID-COLOR)))
 
 (define (show-board b)
-  (let ([images (for/list ([row b])
-                  (hc-append (map make-tile row) TILE-SPACING))])
+  (let ((images (for/list ((row b))
+                  (hc-append (map make-tile row) TILE-SPACING))))
     (vc-append images TILE-SPACING)))
 
 (define (show-board-over b)
-  (let* ([board (show-board b)]
-         [layer (square (image-width board) 'solid (color 0 0 0 90))])
+  (let* ((board (show-board b))
+         (layer (square (image-width board) 'solid (color 0 0 0 90))))
     (overlay (text "Game over!" 40 TILE-FG)
              layer board)))
 
 (define (key->ops a-key)
   (cond
-    [(key=? a-key "left")  move-left]
-    [(key=? a-key "right") move-right]
-    [(key=? a-key "up")    move-up]
-    [(key=? a-key "down")  move-down]
-    [else (λ (x) x)]))
+    ((key=? a-key "left")  move-left)
+    ((key=? a-key "right") move-right)
+    ((key=? a-key "up")    move-up)
+    ((key=? a-key "down")  move-down)
+    (else (λ (x) x))))
 
 (define (change b key)
   ((key->ops key) b))

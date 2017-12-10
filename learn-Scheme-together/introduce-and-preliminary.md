@@ -28,14 +28,19 @@ Scheme(它是一个函数式语言)中很多东西很难用, 比如变量赋值,
 
 比如其他语言定义一个变量并初始化:
 
-> int foo = 10;
+```C
+int foo = 10;
+```
 
 Scheme是:
-> (define foo 10)
+```Schem
+(define foo 10)
+```
 
 或者
-
-> (let ((foo 10)) (TODO))
+```Scheme
+(let ((foo 10)) (TODO))
+```
 
 Scheme可以说是Lisp中最简单的了,语法规则少,内容少,官方文档只有几十页, common lisp内容就多的不像话了.
 
@@ -90,7 +95,7 @@ Linux用户也可以用命令行安装(希望我们记错,不过命令行安装�
 
 
 ### Hello world
-```
+```Scheme
 (display "Hello world") (newline)
 
 (write "Hello world") (newline)

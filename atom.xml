@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Functional Thinking</title>
+  
+  <subtitle>The computer science actually has a lot in common with magic.</subtitle>
+  <link href="/beautiful-code/atom.xml" rel="self"/>
+  
+  <link href="https://ltoddy.github.io/beautiful-code/"/>
+  <updated>2018-03-10T14:32:34.119Z</updated>
+  <id>https://ltoddy.github.io/beautiful-code/</id>
+  
+  <author>
+    <name>ltoddy</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>三个基本构造单元</title>
+    <link href="https://ltoddy.github.io/beautiful-code/2018/03/%E4%B8%89%E4%B8%AA%E5%9F%BA%E6%9C%AC%E6%9E%84%E9%80%A0%E5%8D%95%E5%85%83/"/>
+    <id>https://ltoddy.github.io/beautiful-code/2018/03/三个基本构造单元/</id>
+    <published>2018-03-10T18:22:23.000Z</published>
+    <updated>2018-03-10T14:32:34.119Z</updated>
+    
+    <content type="html"><![CDATA[<p>代码: <a href="https://github.com/ltoddy/beautiful-code/tree/master/basic-structural-unit" target="_blank" rel="noopener">https://github.com/ltoddy/beautiful-code/tree/master/basic-structural-unit</a></p><ul><li><h2 id="过滤-filter"><a href="#过滤-filter" class="headerlink" title="过滤(filter)"></a>过滤(filter)</h2></li></ul><p>过滤(filter)是列表的一种基本操作,根据我们给出的条件,从一个大集合中选出符合我们条件的小集合.</p><a id="more"></a><figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> filter</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (proc iter)</span><br><span class="line">      (<span class="name"><span class="builtin-name">cond</span></span></span><br><span class="line">        ((<span class="name"><span class="builtin-name">null?</span></span> iter) '())</span><br><span class="line">        ((<span class="name">proc</span> (<span class="name"><span class="builtin-name">car</span></span> iter))</span><br><span class="line">         (<span class="name"><span class="builtin-name">cons</span></span> (<span class="name"><span class="builtin-name">car</span></span> iter) (<span class="name">filter</span> proc (<span class="name"><span class="builtin-name">cdr</span></span> iter))))</span><br><span class="line">        (<span class="name"><span class="builtin-name">else</span></span> (<span class="name">filter</span> proc (<span class="name"><span class="builtin-name">cdr</span></span> iter))))))</span><br></pre></td></tr></table></figure><p>过滤函数将我们(通常体现于高阶函数)给定的布尔逻辑作用于集合,返回由原来符合条件<br>的元素组成的子集合,filter操作常与查找(find)函数关系密切.</p><blockquote><p>根据过滤条件来产生一个子集合的时候用filter</p></blockquote><ul><li><h2 id="映射-map"><a href="#映射-map" class="headerlink" title="映射(map)"></a>映射(map)</h2><p>映射(map)操作是对原集合的每一个元素执行给定的函数,从而转变成一个新集合.<br>传给映射函数的是一个高阶函数和一个集合,它在对集合中每一个元素使用传入的函数后,产生另一个集合返回值.<br>返回集合的大小与原来传入的集合相同,只是元素的值变了.</p></li></ul><figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> map</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (proc iter)</span><br><span class="line">      (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> iter)</span><br><span class="line">          '()</span><br><span class="line">          (<span class="name"><span class="builtin-name">cons</span></span> (<span class="name">proc</span> (<span class="name"><span class="builtin-name">car</span></span> iter)) (<span class="name"><span class="builtin-name">map</span></span> proc (<span class="name"><span class="builtin-name">cdr</span></span> iter))))))</span><br></pre></td></tr></table></figure><blockquote><p>需要变换一个集合的时候,用map</p></blockquote><ul><li><h2 id="折叠-reduce"><a href="#折叠-reduce" class="headerlink" title="折叠(reduce)"></a>折叠(reduce)</h2><p>折叠(reduce)用一个积累量来“收集”集合元素.reduce一般需要一个为积累量使用的初始值.</p></li></ul><figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> reduce</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (proc init iter)</span><br><span class="line">      (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> iter)</span><br><span class="line">          init</span><br><span class="line">          (<span class="name">proc</span> (<span class="name"><span class="builtin-name">car</span></span> iter) (<span class="name">reduce</span> proc init (<span class="name"><span class="builtin-name">cdr</span></span> iter))))))</span><br></pre></td></tr></table></figure><blockquote><p>把集合一小块一小块的处理的时候,用reduce</p></blockquote><hr><p>学习新范式的困难有一部分在于学习新的术语.假如遇到不同社群使用不同的术语的情况,想搞清楚就更难了.<br>不过只要抓住不同语言的共同点去观察,就能够看穿在形形色色的语法遮挡之下,其实功能大同小异.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;代码: &lt;a href=&quot;https://github.com/ltoddy/beautiful-code/tree/master/basic-structural-unit&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/ltoddy/beautiful-code/tree/master/basic-structural-unit&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;h2 id=&quot;过滤-filter&quot;&gt;&lt;a href=&quot;#过滤-filter&quot; class=&quot;headerlink&quot; title=&quot;过滤(filter)&quot;&gt;&lt;/a&gt;过滤(filter)&lt;/h2&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;过滤(filter)是列表的一种基本操作,根据我们给出的条件,从一个大集合中选出符合我们条件的小集合.&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>思维转变</title>
+    <link href="https://ltoddy.github.io/beautiful-code/2018/03/%E6%80%9D%E7%BB%B4%E8%BD%AC%E5%8F%98/"/>
+    <id>https://ltoddy.github.io/beautiful-code/2018/03/思维转变/</id>
+    <published>2018-03-04T00:00:00.000Z</published>
+    <updated>2018-03-04T09:12:37.511Z</updated>
+    
+    <content type="html"><![CDATA[<p>想象一下你是伐木场的工人,你拥有伐木场最好的斧子,因此你是工作效率最高的.<br>突然有一天来了一个推销的,他把一种新的砍树工具——电锯——给夸到天上去了.<br>这个人很有说服力,所以你也买了一把,不过你不懂得怎么用.<br>没砍几下你得出了这样的结论:”电锯不过是时髦的样子货”.<br>于是把它丢到一边重新用起了习惯的斧子.就在这个时候,有人在你面前把电锯发动了……</p><a id="more"></a><h2 id="学习一种全新的编程范式-困难并不在于掌握新的语言-真正考验人的-是怎么样用一种全新方式去思维"><a href="#学习一种全新的编程范式-困难并不在于掌握新的语言-真正考验人的-是怎么样用一种全新方式去思维" class="headerlink" title="学习一种全新的编程范式,困难并不在于掌握新的语言.真正考验人的,是怎么样用一种全新方式去思维."></a>学习一种全新的编程范式,困难并不在于掌握新的语言.真正考验人的,是怎么样用一种全新方式去思维.</h2><hr><p>计算机科学的进步经常是间歇式,好思路有时候搁置数十年后才能变成主流.<br>举个例子,第一种面向对象的语言Simula 67是1967年发明的,可是直到1983年诞生的C++<br>终于流行起来以后,面向对象才真正成为主流.很多时候,再优秀的想法也得等待技术基础的慢慢成熟.<br>早年Java总被认为太慢,内存消耗太高,不适合高性能的应用,如今硬件市场的变迁,把它变成了极具吸引力的选择.</p><hr><blockquote><p>面向对象编程通过封装不确定因素来使代码能被人理解;函数式编程通过尽量减少不确定因素来使代码能被人理解.</p></blockquote><p>回想一下你熟悉的封装、作用域、可见性等面向对象的构造,这些机制的存在意义,<br>都是为了精细的控制谁能够感知状态和改变状态.而当涉及多线程的时候,<br>对状态的控制就更复杂了.这些机制就属于Michael Feathers所谓的”不确定因素”.</p><p>大多数函数式语言在这个问题上采取了另一种做法,它们认为,与其建立种种机制来控制可变状态,<br>不如尽可能消灭可变的状态这个不确定因素.<br>其立论根据是这样的:假如语言不对外暴露那么多有出错可能的特性,那么开发者就不那么容易犯错.</p><p>在面向对象的命令式编程语言里面,重用的单元是类和类之间沟通用的消息,这些都可以用类图来表述.<br>这个领域的代表性著作:《设计模式:可复用面向对象软件的基础》就在每一个模式的说明里都附上了一个或多个类图.</p><p>OOP的世界提倡对具体问题建立专门的数据结构(class),相关的专门作以”方法”的形式附加在数据结构上.<br>函数式语言实现重用的思路很不一样,函数式语言提倡在有限的几种关键数据结构(如list,set,map)上<br>运用针对这些数据结构高度优化过的操作,以此构成基本的运转机构.再根据具体用途,插入自己数据结构<br>和高阶函数去调整机构的运转方式.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;想象一下你是伐木场的工人,你拥有伐木场最好的斧子,因此你是工作效率最高的.&lt;br&gt;突然有一天来了一个推销的,他把一种新的砍树工具——电锯——给夸到天上去了.&lt;br&gt;这个人很有说服力,所以你也买了一把,不过你不懂得怎么用.&lt;br&gt;没砍几下你得出了这样的结论:”电锯不过是时髦的样子货”.&lt;br&gt;于是把它丢到一边重新用起了习惯的斧子.就在这个时候,有人在你面前把电锯发动了……&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>preface</title>
+    <link href="https://ltoddy.github.io/beautiful-code/2018/03/preface/"/>
+    <id>https://ltoddy.github.io/beautiful-code/2018/03/preface/</id>
+    <published>2018-03-03T14:57:47.000Z</published>
+    <updated>2018-03-03T09:36:44.710Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>函数式编程不是屠龙之技</strong>.过去在一般程序员的认识里,函数式编程是一种仅仅存在于像<br>Haskell,Lisp,OCaml里.然而我们观察当今的主流语言,<br>会发现函数式编程已经成为了标配,唯其存在形式发生了变化,从固执与“纯”函数语言,<br>转变为让一些关键的函数式特征或深或浅地融入到各式语言中去.</p><a id="more"></a><p>函数式编程的普及趋势,主要归功于纯函数,一等函数,高阶函数等特征迎合了人们提高语法表现力和解决大规模并发问题的需要.<br>函数式编程进入主流语言,意味着我们实际上已经在不同程度地使用着函数式编程.<br>比如,你不用F#,但LINQ实在是太方便,你可能觉得Clojure太怪异,但map、filter、reduce任何时候都是必备的利器.</p><p>但是函数式有没有必要学呢,靡不有初,鲜克有终.既然你都看了我这篇essay,那就坚持学下去吧.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;函数式编程不是屠龙之技&lt;/strong&gt;.过去在一般程序员的认识里,函数式编程是一种仅仅存在于像&lt;br&gt;Haskell,Lisp,OCaml里.然而我们观察当今的主流语言,&lt;br&gt;会发现函数式编程已经成为了标配,唯其存在形式发生了变化,从固执与“纯”函数语言,&lt;br&gt;转变为让一些关键的函数式特征或深或浅地融入到各式语言中去.&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
